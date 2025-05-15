@@ -32,6 +32,7 @@ app.get('/pokemons', (req, res) => {
 app.use(express.json()); // Asegura que se pueda leer JSON en el body
 
 app.post('/login', (req, res) => {
+  console.log("Iniciando Login")
   const { username, password } = req.body;
 
   if (!username || !password) {
