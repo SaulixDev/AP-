@@ -33,14 +33,14 @@ app.use(express.json()); // Asegura que se pueda leer JSON en el body
 
 app.post('/login', (req, res) => {
   console.log("Iniciando Login")
-  const { username, password } = req.body;
+  const {  alias, contraseña } = req.body;
 
-  if (!username || !password) {
+  if (!alias || !contraseña) {
     return res.status(400).json({ error: 'Faltan nombre de usuario o contraseña' });
   }
 
-  const query = 'SELECT * FROM users WHERE username = ?';
-  db.query(query, [username], (err, results) => {
+  const query = 'SELECT * FROM users WHERE alias = ?';
+  db.query(query, [alias], (err, results) => {
     if (err) {
       console.error('Error en la consulta:', err);
       return res.status(500).json({ error: 'Error interno del servidor' });
@@ -53,12 +53,12 @@ app.post('/login', (req, res) => {
     const user = results[0];
 
     // Comparar hash enviado con el hash guardado
-    if (user.password !== password) {
+    if (user.contraseña !== contraseña) {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
     // Login correcto, responder con info simple
-    res.json({ message: 'Login exitoso', user: { id: user.id, username: user.username } });
+    res.json({ message: 'Login exitoso', user: { id: user.id, alias: user.alias } });
   });
 });
 
