@@ -39,7 +39,7 @@ app.post('/login', (req, res) => {
     return res.status(400).json({ error: 'Faltan nombre de usuario o contraseña' });
   }
 
-  const query = 'SELECT * FROM users WHERE alias = ?';
+  const query = 'SELECT * FROM usuarios WHERE alias = ?';
   db.query(query, [alias], (err, results) => {
     if (err) {
       console.error('Error en la consulta:', err);
