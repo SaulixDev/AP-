@@ -29,6 +29,38 @@ app.get('/pokemons', (req, res) => {
   });
 });
 
+app.use(express.json()); // Asegura que se pueda leer JSON en el body
+
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Faltan nombre de usuario o contraseña' });
+  }
+
+  const query = 'SELECT * FROM users WHERE username = ?';
+  db.query(query, [username], (err, results) => {
+    if (err) {
+      console.error('Error en la consulta:', err);
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+
+    if (results.length === 0) {
+      return res.status(401).json({ error: 'Usuario no encontrado' });
+    }
+
+    const user = results[0];
+
+    // Comparar hash enviado con el hash guardado
+    if (user.password !== password) {
+      return res.status(401).json({ error: 'Contraseña incorrecta' });
+    }
+
+    // Login correcto, responder con info simple
+    res.json({ message: 'Login exitoso', user: { id: user.id, username: user.username } });
+  });
+});
+
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Servidor corriendo`);
 });
