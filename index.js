@@ -20,6 +20,7 @@ db.connect(err => {
 });
 
 app.get('/pokemons', (req, res) => {
+    console.log("Recogiendo Pokemons")
   db.query('SELECT * FROM pokemons', (err, results) => {
     if (err) {
       console.error('Error en la consulta:', err);
